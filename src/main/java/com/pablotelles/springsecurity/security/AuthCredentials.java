@@ -59,7 +59,8 @@ public class AuthCredentials {
 	}
 	
 	
-	
+	public AuthCredentials() {
+	}
 	
 	
 }

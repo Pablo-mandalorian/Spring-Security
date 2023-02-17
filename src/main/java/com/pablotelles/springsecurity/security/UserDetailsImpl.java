@@ -8,8 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.pablotelles.springsecurity.model.User;
 
-import lombok.AllArgsConstructor;
-
 public class UserDetailsImpl implements UserDetails{
 	
 	private final User user;
@@ -55,6 +53,10 @@ public class UserDetailsImpl implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+	
+	public String getName(){
+		return user.getName();
 	}
 
 }
