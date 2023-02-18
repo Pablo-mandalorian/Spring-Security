@@ -28,13 +28,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		try {
 			authCredentials  = new ObjectMapper().readValue(httpServletRequest.getReader(), AuthCredentials.class);
 		} catch (StreamReadException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (DatabindException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -56,7 +53,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
 		
-		
+		UserDetailsImpl userDetailsImpl =(UserDetailsImpl) authResult.getPrincipal();
+		String token = TokenUtils.createToken(userDetailsImpl.getName(), userDetailsImpl.getUsername());
+
+		response.addHeader("Authorization", "Bearer " + token);
+		response.getWriter().flush();
+
 		super.successfulAuthentication(request, response, chain, authResult);
 	}
 	
