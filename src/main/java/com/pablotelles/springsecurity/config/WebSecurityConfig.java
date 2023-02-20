@@ -1,4 +1,4 @@
-package com.pablotelles.springsecurity.security;
+package com.pablotelles.springsecurity.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.pablotelles.springsecurity.security.JWTAuthenticationFilter;
+import com.pablotelles.springsecurity.security.JWTAuthorizationFilter;
 
 import lombok.AllArgsConstructor;
 
@@ -32,9 +35,13 @@ public class WebSecurityConfig {
 
 
 		return httpSecurity.csrf().disable()
-				.authorizeRequests()
+				.authorizeHttpRequests()
+				.requestMatchers("api/v1/contacts")
+				.permitAll()
 				.anyRequest()
 				.authenticated()
+				.and()
+				.httpBasic()
 				.and()
 				.sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -43,21 +50,6 @@ public class WebSecurityConfig {
 				.addFilterBefore(authorizationFilter,UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}
-	
-	/*
-	 
-	 @Bean
-	UserDetailsService userDetailsService(){
-		InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-		manager.createUser(User.withUsername("Pablo")
-				.password(passwordEncoder().encode("admin"))
-				.roles()
-				.build());
-		return manager;
-		
-	}
-	 */
-	
 	
 	@Bean
 	AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception{
@@ -72,5 +64,14 @@ public class WebSecurityConfig {
 	PasswordEncoder passwordEncoder(){
 		return new BCryptPasswordEncoder();
 	}
+
+	
+	/*public static void main(String[] args) {
+		System.out.println("Pass:" + new BCryptPasswordEncoder().encode("pablo"));
+		System.out.println("Pass:" + new BCryptPasswordEncoder().encode("robin"));
+		System.out.println("Pass:" + new BCryptPasswordEncoder().encode("lolita"));
+		}
+	*/
+	
 
 }
